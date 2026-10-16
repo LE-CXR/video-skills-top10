@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>10 大爆火的视频 Skills · TOP10 汇总（2026-10-16 实测）</title>
+<meta name="description" content="10 个爆火开源视频 Skill 的汇总榜单：今日真实星数、34 天增速、安装命令、适用场景与本地可用性，数据来自 GitHub API。">
+<meta name="theme-color" content="#0d1b3e">
+<style>
+  :root{
+    --navy:#0d1b3e;
+    --navy-2:#16264f;
+    --accent:#c1121f;
+    --accent-soft:#e63946;
+    --ink:#101828;
+    --muted:#5b6780;
+    --line:#e3e7ef;
+    --bg:#f4f6fb;
+    --card:#ffffff;
+    --ok:#0f7b4f;
+    --warn:#a15c00;
+    --radius:16px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.6;
+  }
+  a{color:inherit}
+  .wrap{max-width:920px;margin:0 auto;padding:0 16px 64px}
+
+  /* ---------- hero ---------- */
+  .hero{
+    background:linear-gradient(160deg,var(--navy) 0%,var(--navy-2) 60%,#1d3063 100%);
+    color:#fff;padding:44px 16px 34px;margin-bottom:22px;
+  }
+  .hero .inner{max-width:920px;margin:0 auto}
+  .kicker{
+    font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+    color:#8fa6d8;font-weight:700;margin:0 0 10px
+  }
+  h1{
+    font-size:clamp(30px,7vw,52px);line-height:1.12;margin:0 0 12px;
+    font-weight:900;letter-spacing:-.01em
+  }
+  h1 .hl{color:#ffd166}
+  .sub{font-size:clamp(14px,3.4vw,18px);color:#c9d5f0;margin:0 0 18px;font-weight:600}
+  .badges{display:flex;flex-wrap:wrap;gap:8px}
+  .badge{
+    font-size:12px;font-weight:700;padding:5px 11px;border-radius:999px;
+    background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#e8eeff
+  }
+  .badge.live{background:rgba(255,209,102,.16);border-color:rgba(255,209,102,.45);color:#ffd166}
+
+  /* ---------- stats ---------- */
+  .stats{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0 0 22px
+  }
+  @media(max-width:640px){.stats{grid-template-columns:repeat(2,1fr)}}
+  .stat{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:14px 14px 12px
+  }
+  .stat b{display:block;font-size:clamp(19px,4.6vw,26px);color:var(--navy);letter-spacing:-.02em}
+  .stat span{font-size:12px;color:var(--muted);font-weight:600}
+
+  /* ---------- controls ---------- */
+  .controls{
+    display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+    margin:0 0 16px;position:sticky;top:0;z-index:5;
+    background:linear-gradient(var(--bg) 72%,rgba(244,246,251,0));
+    padding:10px 0
+  }
+  .chip{
+    appearance:none;border:1px solid var(--line);background:#fff;color:var(--muted);
+    font:inherit;font-size:13px;font-weight:700;padding:7px 14px;border-radius:999px;cursor:pointer;
+    transition:.15s
+  }
+  .chip:hover{border-color:#c3cddf;color:var(--navy)}
+  .chip[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+  .spacer{flex:1}
+
+  /* ---------- cards ---------- */
+  .list{display:flex;flex-direction:column;gap:14px}
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:16px 18px;position:relative;overflow:hidden;
+    box-shadow:0 1px 2px rgba(13,27,62,.04)
+  }
+  .card::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:4px;
+    background:linear-gradient(var(--navy),#4a6fc4)
+  }
+  .card[data-kind="自动成片"]::before{background:linear-gradient(#0f7b4f,#41b98a)}
+  .card[data-kind="剪辑"]::before{background:linear-gradient(#c1121f,#e63946)}
+  .card[data-kind="代码·动效"]::before{background:linear-gradient(#1d4ed8,#60a5fa)}
+  .card[data-kind="提示词"]::before{background:linear-gradient(#a15c00,#f0b357)}
+
+  .row1{display:flex;align-items:flex-start;gap:14px}
+  .rank{
+    font-size:30px;font-weight:900;color:#c7d0e2;line-height:1;min-width:52px;
+    font-variant-numeric:tabular-nums;letter-spacing:-.03em
+  }
+  .title-block{flex:1;min-width:0}
+  .name{
+    font-size:clamp(18px,4.4vw,22px);font-weight:800;letter-spacing:-.01em;
+    display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 2px
+  }
+  .name a{text-decoration:none}
+  .name a:hover{text-decoration:underline}
+  .path{font-size:12.5px;color:var(--muted);word-break:break-all;margin:0}
+  .stars{
+    text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums
+  }
+  .stars b{font-size:clamp(19px,4.6vw,24px);color:var(--accent);font-weight:900;display:block;line-height:1.2}
+  .stars em{font-style:normal;font-size:12px;font-weight:700;color:var(--ok)}
+  .stars em.down{color:var(--warn)}
+
+  .tags{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 10px}
+  .tag{font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:6px;background:#eef2fa;color:var(--navy-2)}
+  .tag.kind-note{background:#fff3e6;color:#8a4b00}
+  .tag.lang{background:#eaf7f1;color:var(--ok)}
+  .tag.move{background:#ffeaea;color:var(--accent)}
+  .tag.move.flat{background:#eef2fa;color:var(--muted)}
+
+  .what{margin:0 0 8px;font-size:14.5px}
+  .who{margin:0 0 12px;font-size:13px;color:var(--muted)}
+  .who b,.what b{color:var(--navy-2)}
+
+  .cmd{
+    display:flex;align-items:center;gap:8px;background:#0f172a;border-radius:10px;
+    padding:9px 10px 9px 13px;margin:0 0 8px
+  }
+  .cmd code{
+    flex:1;min-width:0;color:#d6e2ff;font-size:12.5px;font-family:ui-monospace,SFMono-Regular,
+    Consolas,"Liberation Mono",monospace;white-space:pre-wrap;word-break:break-all
+  }
+  .copy{
+    appearance:none;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.08);
+    color:#e8eeff;font:inherit;font-size:11.5px;font-weight:700;padding:4px 10px;
+    border-radius:7px;cursor:pointer;flex:none
+  }
+  .copy:hover{background:rgba(255,255,255,.18)}
+  .alt{font-size:12.5px;color:var(--muted);margin:0 0 10px;word-break:break-word}
+
+  .links{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;font-weight:700}
+  .links a{color:#1d4ed8;text-decoration:none}
+  .links a:hover{text-decoration:underline}
+
+  .bar{height:7px;border-radius:999px;background:#eef2fa;margin:14px 0 0;overflow:hidden}
+  .bar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--navy),#5a80d6)}
+
+  /* ---------- sections ---------- */
+  section.block{margin:34px 0 0}
+  h2{font-size:clamp(19px,4.4vw,24px);font-weight:900;color:var(--navy);margin:0 0 6px;letter-spacing:-.01em}
+  .lead{color:var(--muted);font-size:13.5px;margin:0 0 14px}
+  .pick{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+  .pick div{display:flex;gap:12px;padding:12px 16px;border-top:1px solid var(--line);font-size:14px}
+  .pick div:first-child{border-top:0}
+  .pick span:first-child{flex:none;width:150px;color:var(--muted);font-weight:700;font-size:13px}
+  @media(max-width:560px){
+    .pick div{flex-direction:column;gap:2px}
+    .pick span:first-child{width:auto}
+  }
+  .notes{font-size:13.5px;color:var(--muted)}
+  .notes li{margin-bottom:7px}
+  footer{margin-top:34px;font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+  .toast{
+    position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);
+    background:var(--navy);color:#fff;font-size:13px;font-weight:700;padding:9px 18px;
+    border-radius:999px;opacity:0;pointer-events:none;transition:.22s;z-index:50
+  }
+  .toast.on{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="inner">
+    <p class="kicker">Top 10 · Open Source Video Skills</p>
+    <h1>10 大爆火的<br><span class="hl">视频 Skills</span></h1>
+    <p class="sub">TOP 10 · 从镜头、生成到剪辑，视频创作一套搞定</p>
+    <div class="badges">
+      <span class="badge live">数据核验 2026-10-16 · GitHub API 实测</span>
+      <span class="badge">对照 09-12 榜单重算星数</span>
+      <span class="badge">排名 · 增速 · 安装命令 · 本地可用性</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="stats" id="stats"></div>
+
+  <div class="controls" id="controls"></div>
+  <div class="list" id="list"></div>
+
+  <section class="block">
+    <h2>怎么选：按你的活儿挑</h2>
+    <p class="lead">同样是「AI 做视频」，这十个其实是四条完全不同的路。</p>
+    <div class="pick">
+      <div><span>一条命令就出片</span><span><b>MoneyPrinterTurbo</b> —— 主题进、成片出，适合批量资讯号 / 口播号。</span></div>
+      <div><span>浏览器里剪真人素材</span><span><b>OpenCut</b> —— 开源版剪映，网页端时间线，别再装客户端。</span></div>
+      <div><span>让编码助手剪片</span><span><b>video-use</b>（轻）或 <b>OpenMontage</b>（重）—— 素材丢进去，选段、字幕、初剪全交给 Agent。</span></div>
+      <div><span>做动效 / 数据可视化视频</span><span><b>HyperFrames</b> —— 写 HTML/CSS 动画，稳定渲染成 MP4，字幕与节奏最好控。</span></div>
+      <div><span>每帧都要精确控制</span><span><b>Remotion</b> —— 用 React 写视频，可版本化、可批量、可做模板。</span></div>
+      <div><span>产品发布片 / 广告感</span><span><b>video-shotcraft</b> —— 152 张镜头配方卡 + Remotion 模板，镜头语言直接抄。</span></div>
+      <div><span>主用 Seedance 等模型</span><span><b>seedance2-skill</b> —— 只解决一件事：把提示词写到专业级。</span></div>
+      <div><span>中文创作者 / 短剧口播</span><span><b>chengfeng-videocut-skills</b> —— 中文剪辑 Agent 的 Codex Plugin 入口。</span></div>
+      <div><span>本地 ComfyUI 玩家</span><span><b>Pixelle-Video</b> —— 文生图 → 图生视频 → TTS 全自动串起来。</span></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>榜单发生了什么变化</h2>
+    <ul class="notes">
+      <li><b>34 天净增 5.81 万 ★</b>，十强合计从 44.5 万涨到 50.3 万 ★（+13.1%），热度没有降温。</li>
+      <li><b>HyperFrames 涨得最凶：+15.97k ★（+32.5%）</b>，直接从第 5 挤到第 4，是这批里唯一月增一万五以上的项目。</li>
+      <li><b>OpenMontage +11.24k ★（+19.5%）</b>，把 Remotion 从第 3 挤到第 5——「Agent 全流程制片」比「React 写视频」更吃当下的红利。</li>
+      <li><b>video-shotcraft 相对涨幅第一：+4.07k ★（+50.2%）</b>，绝对数不大但爬得最快，说明「镜头语言 + Remotion 模板」这条细分路被补上了。</li>
+      <li><b>Pixelle-Video（29,104 ★）与 video-use（29,073 ★）只差 31 ★</b>，第六第七名随时互换。</li>
+      <li><b>尾部变化很小</b>：seedance2-skill +0.72k、chengfeng-videocut-skills +0.09k，属于垂直场景的稳定盘。</li>
+      <li>许可上，除 <b>OpenMontage（AGPL-3.0）</b>与 <b>Remotion（自有 Remotion License，公司规模需授权）</b>外，其余多为 MIT / Apache-2.0，商用友好度较高。</li>
+    </ul>
+  </section>
+
+  <footer>
+    <p>数据来源：GitHub REST API（<code>repos</code> / <code>search</code> / <code>readme</code> 端点），逐仓库读取星数、许可、语言、最近推送与 README 安装段；核验时间 <b>2026-10-16</b>。星数为核验当日快照，会持续变动。</p>
+    <p>本页为第三方清单汇总，与上述项目作者无隶属关系；安装命令取自各仓库 README，使用前请以仓库最新文档为准。</p>
+  </footer>
+</div>
+
+<div class="toast" id="toast">已复制</div>
+
+<script>
+const REPO_BASE = "https://github.com/";
+
+const DATA = [
+  {
+    rank:1, name:"MoneyPrinterTurbo", repo:"harry0703/MoneyPrinterTurbo",
+    stars:132031, prev:122600, kind:"自动成片", lang:"Python", license:"MIT",
+    move:"—", moveDir:0,
+    what:"给一个主题或关键词，自动写文案、配素材、配音、上字幕，直接合成高清竖屏短视频。",
+    who:"适合：批量做资讯号 / 口播号的团队。<br>注意：本地需要 Python 3.11+ 与 ffmpeg，成片质感取决于素材源质量。",
+    cmd:"python -m pip install mpt",
+    alt:"或者把 SKILL.md 链接丢给 Agent，它自己装好并跑通出片：docs/skill/SKILL.md（支持 macOS / Windows）",
+    site:""
+  },
+  {
+    rank:2, name:"OpenCut", repo:"OpenCut-app/OpenCut",
+    stars:94897, prev:89300, kind:"剪辑", lang:"TypeScript", license:"MIT",
+    move:"—", moveDir:0,
+    what:"开源的剪映替代品：浏览器里的时间线剪辑，插件优先架构，也能自托管当私人剪辑台。",
+    who:"适合：想摆脱客户端、要在网页里剪片的人。<br>注意：主仓库最近一次推送为 2026-09-24，老代码库另存在 opencut-classic。",
+    cmd:"git clone https://github.com/OpenCut-app/OpenCut.git",
+    alt:"线上直接体验：opencut.app（无需安装，浏览器打开即用）",
+    site:"https://opencut.app"
+  },
+  {
+    rank:3, name:"OpenMontage", repo:"calesthio/OpenMontage",
+    stars:68835, prev:57600, kind:"自动成片", lang:"Python", license:"AGPL-3.0",
+    move:"4 → 3  升", moveDir:1,
+    what:"Agentic 视频生产系统：12 条制作流水线、100+ 工具、700+ 份 Agent skill 与制片知识文件，把编码助手改造成一个视频工作室。",
+    who:"适合：要跑完整制片流程（脚本→分镜→素材→剪辑→交付）的重度用户。<br>注意：AGPL-3.0，商业闭源分发要谨慎；流程较重，Windows 上 npm 安装偶发报错需改用 npx。",
+    cmd:"git clone https://github.com/calesthio/OpenMontage.git",
+    alt:"兼容 Claude Code / Cursor / Copilot / Windsurf / Codex —— 凡是能读文件、能跑代码的助手都能用。",
+    site:"https://www.openmontage.video/"
+  },
+  {
+    rank:4, name:"HyperFrames", repo:"heygen-com/hyperframes",
+    stars:65072, prev:49100, kind:"代码·动效", lang:"TypeScript", license:"Apache-2.0",
+    move:"5 → 4  升", moveDir:1,
+    what:"写 HTML/CSS 动画，稳定渲染成交付级 MP4：字幕、转场、音频可视化、数据图表动效都走这条路。",
+    who:"适合：要做字幕 / 图表 / 网页动效成片的人；也是本批里唯一把「Agent 插件」做成主入口的项目。<br>注意：渲染依赖本地 Node 与浏览器内核。",
+    cmd:"claude plugin marketplace add heygen-com/hyperframes",
+    alt:"独立 skill 安装：npx skills add heygen-com/hyperframes ，然后使用 /hyperframes:hyperframes",
+    site:"https://hyperframes.dev"
+  },
+  {
+    rank:5, name:"Remotion", repo:"remotion-dev/remotion",
+    stars:64541, prev:59000, kind:"代码·动效", lang:"TypeScript", license:"Remotion License",
+    move:"3 → 5  降", moveDir:-1,
+    what:"用 React 以代码方式制作可编程视频：每一帧都是组件，天然可复用、可版本化、可批量渲染。",
+    who:"适合：做模板化批量视频、需要精确控制每一帧的工程团队。<br>注意：许可是自有的 Remotion License，个人与小型团队免费，公司规模使用需授权，商用前先读许可条款。",
+    cmd:"npx create-video@latest",
+    alt:"官方已提供 Agent Skills 接入文档：remotion.dev/docs/ai/skills",
+    site:"https://remotion.dev"
+  },
+  {
+    rank:6, name:"Pixelle-Video", repo:"ATH-MaaS/Pixelle-Video",
+    stars:29104, prev:28000, kind:"自动成片", lang:"Python", license:"Apache-2.0",
+    move:"—", moveDir:0,
+    what:"AI 全自动短视频引擎：输入主题，走 ComfyUI 路线完成文案、文生图、图生视频、TTS 配音到成片。",
+    who:"适合：本地已有 ComfyUI、想自己掌控模型链路的玩家。<br>注意：仓库已从 AIDC-AI 迁移到 ATH-MaaS，老链接会重定向；主仓库最近推送为 2026-06-14，更新节奏偏慢。",
+    cmd:"git clone https://github.com/ATH-MaaS/Pixelle-Video.git",
+    alt:"文档站：aidc-ai.github.io/Pixelle-Video/zh",
+    site:"https://aidc-ai.github.io/Pixelle-Video/zh"
+  },
+  {
+    rank:7, name:"video-use", repo:"browser-use/video-use",
+    stars:29073, prev:24700, kind:"剪辑", lang:"Python", license:"MIT",
+    move:"—", moveDir:0,
+    what:"用编码助手剪真人素材：从多条长素材里挑片段、生成字幕、拼出初版成片。",
+    who:"适合：口播、Vlog、访谈的粗剪，把「看一遍素材」的活交给 Agent。<br>注意：需要 Python 与 ffmpeg，Mac / Linux 的软链安装方式最省事。",
+    cmd:"git clone https://github.com/browser-use/video-use ~/.codex/skills/video-use",
+    alt:"接着 uv sync（或 pip install -e .）装依赖；Claude Code 则软链到 ~/.claude/skills/video-use",
+    site:"https://video-use.com"
+  },
+  {
+    rank:8, name:"video-shotcraft", repo:"Vincentwei1021/video-shotcraft",
+    stars:12167, prev:8100, kind:"代码·动效", lang:"TypeScript", license:"Apache-2.0",
+    move:"—", moveDir:0,
+    what:"面向编码助手的电影感产品视频 skill：152 张镜头配方卡、209 个动效预览，配 Remotion 模板直接出片。",
+    who:"适合：做产品发布片、需要「镜头语言」而不是随机转场的人。<br>注意：底层是 Remotion，需先有 Node 环境。",
+    cmd:"npx skills add Vincentwei1021/video-shotcraft",
+    alt:"也可以直接对 Agent 说：帮我安装这个 skill：github.com/Vincentwei1021/video-shotcraft",
+    site:"https://vincentwei1021.github.io/video-shotcraft/"
+  },
+  {
+    rank:9, name:"seedance2-skill", repo:"dexhunter/seedance2-skill",
+    stars:4322, prev:3600, kind:"提示词", lang:"Markdown", license:"MIT",
+    move:"—", moveDir:0,
+    what:"为 Seedance 2.0 写最佳视频提示词的 skill：分镜、运镜、景别与素材引用写成可复用的提示模板，中英双语。",
+    who:"适合：主要用 Seedance 等模型生成镜头、想把提示词工业化的人。<br>注意：它不生成视频，产出的是提示词；视频还得交给模型跑。",
+    cmd:"npx skills add dexhunter/seedance2-skill",
+    alt:"手动方式：把 SKILL.md 复制到 ~/.claude/skills/seedance-prompt-en.md，中文版在 zh/SKILL.md",
+    site:"https://seedance2.help"
+  },
+  {
+    rank:10, name:"chengfeng-videocut-skills", repo:"Agentchengfeng/chengfeng-videocut-skills",
+    stars:3085, prev:3000, kind:"剪辑", lang:"JavaScript", license:"Apache-2.0",
+    move:"—", moveDir:0,
+    what:"中文创作者的视频剪辑 Agent：本仓库是 Codex Plugin 的固定安装入口，完整的方法、字幕与剪辑流程都在里面，Runtime / 工作台在 chengfeng-videocut。",
+    who:"适合：中文口播、短剧、批量剪辑流程。<br>注意：需要 Node.js 18+ 与已登录的 Codex CLI；装 Plugin、准备 Runtime、完成视频是三件事，Runtime 版本不匹配时它会只报告不自动升级。",
+    cmd:"codex plugin marketplace add Agentchengfeng/chengfeng-videocut-skills",
+    alt:"具体命令请以仓库 README 的最新固定版本为准（仓库会锁定 marketplaceRef 与 pluginRef）。",
+    site:""
+  }
+];
+
+const FILTERS = ["全部","自动成片","剪辑","代码·动效","提示词"];
+const SORTS = [
+  { id:"stars", label:"按星数" },
+  { id:"growth", label:"按 34 天增速" }
+];
+let activeFilter = "全部";
+let activeSort = "stars";
+
+const fmt = n => n.toLocaleString("en-US");
+const kFmt = n => (n/1000).toFixed(1) + "k";
+
+function statsBlock(){
+  const total = DATA.reduce((s,d)=>s+d.stars,0);
+  const prev = DATA.reduce((s,d)=>s+d.prev,0);
+  const delta = total - prev;
+  const pct = (delta/prev*100).toFixed(1);
+  const fast = DATA.reduce((a,b)=>(b.stars-b.prev)>(a.stars-a.prev)?b:a);
+  const items = [
+    { b:"10", s:"个上榜开源项目" },
+    { b:kFmt(total), s:"合计星数（今日实测）" },
+    { b:"+"+kFmt(delta), s:"34 天净增 · +"+pct+"%" },
+    { b:fast.name.slice(0,12), s:"增速第一 · +"+kFmt(fast.stars-fast.prev) }
+  ];
+  document.getElementById("stats").innerHTML = items
+    .map(i=>'<div class="stat"><b>'+i.b+'</b><span>'+i.s+'</span></div>').join("");
+}
+
+function controlsBlock(){
+  const chips = FILTERS.map(f =>
+    '<button class="chip" data-filter="'+f+'" aria-pressed="'+(f===activeFilter)+'">'+f+'</button>'
+  ).join("");
+  const sorts = SORTS.map(s =>
+    '<button class="chip" data-sort="'+s.id+'" aria-pressed="'+(s.id===activeSort)+'">'+s.label+'</button>'
+  ).join("");
+  document.getElementById("controls").innerHTML =
+    chips + '<span class="spacer"></span>' + sorts;
+  document.querySelectorAll("[data-filter]").forEach(b=>b.onclick=()=>{
+    activeFilter = b.dataset.filter; render();
+  });
+  document.querySelectorAll("[data-sort]").forEach(b=>b.onclick=()=>{
+    activeSort = b.dataset.sort; render();
+  });
+}
+
+function moveTag(d){
+  if(!d.move || d.move.indexOf("—")===0) return '<span class="tag move flat">名次不变</span>';
+  return '<span class="tag move">'+d.move+'</span>';
+}
+
+function card(d){
+  const max = Math.max(...DATA.map(x=>x.stars));
+  const delta = d.stars - d.prev;
+  const pct = (delta/d.prev*100).toFixed(1);
+  const width = Math.max(6, d.stars/max*100).toFixed(1);
+  return [
+    '<article class="card" data-kind="'+d.kind+'">',
+      '<div class="row1">',
+        '<div class="rank">'+String(d.rank).padStart(2,"0")+'</div>',
+        '<div class="title-block">',
+          '<h3 class="name"><a href="'+REPO_BASE+d.repo+'" target="_blank" rel="noopener">'+d.name+'</a></h3>',
+          '<p class="path">'+d.repo+'</p>',
+        '</div>',
+        '<div class="stars"><b>'+kFmt(d.stars)+' ★</b><em>+'+kFmt(delta)+' · '+pct+'%</em></div>',
+      '</div>',
+      '<div class="tags">',
+        '<span class="tag kind-note">'+d.kind+'</span>',
+        '<span class="tag lang">'+d.lang+'</span>',
+        '<span class="tag">'+d.license+'</span>',
+        moveTag(d),
+      '</div>',
+      '<p class="what"><b>干什么：</b>'+d.what+'</p>',
+      '<p class="who"><b>怎么用：</b>'+d.who+'</p>',
+      '<div class="cmd"><code>'+d.cmd.replace(/&/g,"&amp;").replace(/</g,"&lt;")+'</code>'+
+        '<button class="copy" data-copy="'+d.cmd.replace(/"/g,"&quot;")+'">复制</button></div>',
+      '<p class="alt">'+d.alt+'</p>',
+      '<div class="links">',
+        '<a href="'+REPO_BASE+d.repo+'" target="_blank" rel="noopener">GitHub 仓库 ↗</a>',
+        d.site ? '<a href="'+d.site+'" target="_blank" rel="noopener">官网 / 文档 ↗</a>' : '',
+      '</div>',
+      '<div class="bar"><i style="width:'+width+'%"></i></div>',
+    '</article>'
+  ].join("");
+}
+
+function render(){
+  controlsBlock();
+  let rows = DATA.filter(d => activeFilter==="全部" || d.kind===activeFilter);
+  rows = rows.slice().sort((a,b) =>
+    activeSort==="stars" ? b.stars-a.stars : (b.stars-b.prev)-(a.stars-a.prev)
+  );
+  document.getElementById("list").innerHTML = rows.map(card).join("");
+  document.querySelectorAll(".copy").forEach(b=>b.onclick=()=>{
+    const t = b.dataset.copy;
+    const done = ()=>{ toast(); b.textContent="已复制"; setTimeout(()=>b.textContent="复制",1400); };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(t).then(done).catch(fallback);
+    } else { fallback(); }
+    function fallback(){
+      const ta=document.createElement("textarea");
+      ta.value=t; ta.style.position="fixed"; ta.style.opacity="0";
+      document.body.appendChild(ta); ta.select();
+      try{ document.execCommand("copy"); done(); }catch(e){}
+      document.body.removeChild(ta);
+    }
+  });
+}
+
+let toastTimer;
+function toast(){
+  const el=document.getElementById("toast");
+  el.classList.add("on");
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>el.classList.remove("on"),1400);
+}
+
+statsBlock();
+render();
+</script>
+</body>
+</html>
