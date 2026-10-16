@@ -154,6 +154,16 @@
   .bar{height:7px;border-radius:999px;background:#eef2fa;margin:14px 0 0;overflow:hidden}
   .bar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--navy),#5a80d6)}
 
+  /* 窄屏：星数换到独立一行，避免和长项目名挤在一起 */
+  @media(max-width:640px){
+    .row1{flex-wrap:wrap}
+    .stars{
+      flex:1 0 100%;text-align:left;display:flex;align-items:baseline;gap:10px;
+      margin-top:6px;padding-left:66px
+    }
+    .stars em{font-size:12.5px}
+  }
+
   /* ---------- sections ---------- */
   section.block{margin:34px 0 0}
   h2{font-size:clamp(19px,4.4vw,24px);font-weight:900;color:var(--navy);margin:0 0 6px;letter-spacing:-.01em}
